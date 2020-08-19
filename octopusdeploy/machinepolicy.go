@@ -73,3 +73,35 @@ func (s *MachinePolicyService) GetAll() (*[]MachinePolicy, error) {
 	}
 	return &p, nil
 }
+
+func (s *MachinePolicyService) Add(machinePolicy *MachinePolicy) (*MachinePolicy, error) {
+	resp, err := apiAdd(s.sling, machinePolicy, new(MachinePolicy), "machinepolicies")
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.(*MachinePolicy), nil
+}
+
+func (s *MachinePolicyService) Delete(machinePolicyID string) error {
+	path := fmt.Sprintf("projectgroups/%s", machinePolicyID)
+	err := apiDelete(s.sling, path)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *MachinePolicyService) Update(machinePolicy *MachinePolicy) (*MachinePolicy, error) {
+	path := fmt.Sprintf("machinepolicies/%s", machinePolicy.ID)
+	resp, err := apiUpdate(s.sling, machinePolicy, new(MachinePolicy), path)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.(*MachinePolicy), nil
+}
